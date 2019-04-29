@@ -4,47 +4,103 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
   <title>Document</title>
 </head>
 <style>
-  #box {
-    background-color: pink;
-    width: 100px;
-    height: 500px; 
-    margin: 100px 0px;
+  body {
+    padding: 20px;
+    font-family: 'Nunito', sans-serif;
+  }
+  .center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  #target {
+    background-color: #fffa67;
+    display: inline-block;
+    padding: 4em 3em;
+    position: absolute;
+    top: 23%;
+    border-radius: 50%;
+    letter-spacing: 1px;
+    font-weight: bold;
+  }
+
+  #statusContainer {
+    background-color: #ff8;
+    opacity: .9;
+    width: 500px;
+    height: 50px;
+    border-radius: 40px;
+    text-align: center;
+    line-height: 0.4;
+    margin-bottom: 30px;
+  }
+
+  .isIntersectingTrue {
+    background: linear-gradient(to right, #85ef47 0%, #00bd56 100%);
+  }
+
+  .isIntersectingFalse {
+    background: linear-gradient(to right, #ff6767 0%, #ff3434 100%);
+  }
+
+  #root {
+    border: 10px dashed #e8e8e8;
+    position: relative;
+    width: 500px;
+    height: 300px;
+    box-sizing: border-box;
   }
 </style>
 <body>
-  <div id="box">:)</div>
+  <div class="center">
+    <div id="statusContainer"><h2 id="status">unknown</h2></div>
+    <div id="root" class="center">
+      <div id="target">TARGET</div>
+    </div>
+  </div>
 </body>
 <script>
-  let prevRatio = 0.0;
-  let increasingColor = "rgba(40, 40, 190, ratio)";
-  let decreasingColor = "rgba(190, 40, 40, ratio)";
-  const img = document.getElementById('box');
+    // DOM elements
+    const statusContainer = document.getElementById("statusContainer");
+    const status = document.getElementById("status");
+    const root = document.getElementById("root");
+    const target = document.getElementById("target");
 
-  let options = {
-    root: null,
-    rootMargin: "0px",
-    threshold: 0.5,
-  };
-
-  let observer = new IntersectionObserver(handleIntersect, options);
-
-  observer.observe(img);
-
-  function handleIntersect(entries, observer) {
-    console.log('ENTRIES: ', entries);
-    console.log('OBSERVER: ', observer);
-    entries.forEach(function(entry) {
-      if (entry.intersectionRatio > prevRatio) {
-        entry.target.style.backgroundColor = increasingColor.replace("ratio", entry.intersectionRatio);
-      } else {
-        entry.target.style.backgroundColor = decreasingColor.replace("ratio", entry.intersectionRatio);
+    // Register event lister
+    window.addEventListener('keydown', (e) => {
+      if (e.keyCode === 38) {
+        const { top } = getComputedStyle(target);
+        target.style.top = `${parseInt(top.split('px')[0]) + 10}px`;
       }
 
-      prevRatio = entry.intersectionRatio;
+      if (e.keyCode === 40) {
+        const { top } = getComputedStyle(target);
+        target.style.top = `${parseInt(top.split('px')[0]) - 10}px`;
+      }
     });
-  }
+    
+    const config = {
+      root: root,
+      threshold: 0,
+    };
+
+    // Create IntersectionObserver instance
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        status.textContent = entry.isIntersecting ? "Está intersectando 🥳" : "No está intersectando 😔";
+        if (entry.isIntersecting) {
+          statusContainer.className = "isIntersectingTrue";
+        } else {
+          statusContainer.className = "isIntersectingFalse";
+        }
+      });
+    }, config);
+
+    io.observe(target);
 </script>
 </html>

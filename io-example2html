@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<style>
+  div {
+    width: 100%;
+    height: 200px;
+    margin: 200px 0px;
+    background-color: pink; 
+  }
+</style>
+<body>
+  <div id="box1"></div>
+  <div id="box2"></div>
+  <div id="box3"></div>
+  <div id="box4"></div>
+</body>
+<script>
+  const io = new IntersectionObserver(entries => {
+    for(const entry of entries)
+      console.log(`${entry.target.id} is in view: ${entry.isIntersecting}`);
+  });
+
+  document.querySelectorAll('div')
+    .forEach(elem => io.observe(elem));
+</script>
+</html>

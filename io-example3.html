@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<style>
+  #box {
+    background-color: pink;
+    width: 100px;
+    height: 500px; 
+    margin: 100px 0px;
+  }
+</style>
+<body>
+  <div id="box">:)</div>
+</body>
+<script>
+  let prevRatio = 0.0;
+  let increasingColor = "rgba(40, 40, 190, ratio)";
+  let decreasingColor = "rgba(190, 40, 40, ratio)";
+  const img = document.getElementById('box');
+
+  let options = {
+    root: null,
+    rootMargin: "0px",
+    threshold: 0.5,
+  };
+
+  let observer = new IntersectionObserver(handleIntersect, options);
+
+  observer.observe(img);
+
+  function handleIntersect(entries, observer) {
+    console.log('ENTRIES: ', entries);
+    console.log('OBSERVER: ', observer);
+    entries.forEach(function(entry) {
+      if (entry.intersectionRatio > prevRatio) {
+        entry.target.style.backgroundColor = increasingColor.replace("ratio", entry.intersectionRatio);
+      } else {
+        entry.target.style.backgroundColor = decreasingColor.replace("ratio", entry.intersectionRatio);
+      }
+
+      prevRatio = entry.intersectionRatio;
+    });
+  }
+</script>
+</html>
