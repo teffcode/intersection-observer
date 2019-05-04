@@ -92,7 +92,6 @@
     // Create IntersectionObserver instance
     const io = new IntersectionObserver((entries) => {
       entries.map(entry => {
-        console.log('ENTRY: ', entry);
         status.textContent = entry.isIntersecting ? "Está intersecando 🥳" : "No está intersecando 😔";
         if (entry.isIntersecting) {
           statusContainer.className = "isIntersectingTrue";
